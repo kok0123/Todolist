@@ -5,7 +5,7 @@ const taskList = document.getElementById('taskList');
 add.addEventListener('click', () => {
     if (todo.value.trim() == '') {
         window.alert('タスクを入力してください');
-    }else {
+    } else {
         const taskContainer = document.createTextNode(todo.value);
         todo.value = '';
         const li = document.createElement('li');
@@ -20,13 +20,13 @@ add.addEventListener('click', () => {
         delbtn.setAttribute('id', 'delbtn');
         li.appendChild(delbtn);
         
-        const deleteTask = (delbtn) => {
+        const deleteTask = () => {
             const selectedTask = delbtn.closest('li');
             taskList.removeChild(selectedTask);
         };
 
         delbtn.addEventListener('click', () => { 
-            deleteTask(delbtn);
+            deleteTask();
         });
     }
 });
