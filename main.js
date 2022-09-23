@@ -13,7 +13,38 @@ document.addEventListener("DOMContentLoaded", () => {
     listItem = JSON.parse(json);
   
     for (const item of listItem) { 
-        controlItem(item);
+        //controlItem(item);
+        const taskContainer = document.createTextNode(item.todoitem);
+        todo.value = '';
+        const li = document.createElement('li');
+        const p = document.createElement('p');
+
+        p.appendChild(taskContainer);
+        li.appendChild(p);
+        taskList.appendChild(li);
+        
+        const delbtn = document.createElement('button');
+        delbtn.innerHTML = "消去";
+        delbtn.setAttribute('id', 'delbtn');
+        li.appendChild(delbtn);
+
+        const deleteTask = () => {
+            const selectedTask = delbtn.closest('li');
+            taskList.removeChild(selectedTask);
+        
+            const delContent = selectedTask.previousElementSibling;
+            const delFind = listItem.find(
+                (item) => item.todoitem == delContent.textContent
+            );
+            delFind.delConfirm = true;
+            const remainlistItem = listItem.filter((item) => item.delConfirm === false);
+            listItem = remainlistItem;
+            storage.store = JSON.stringify(listItem);
+        };
+        
+        delbtn.addEventListener('click', () => { 
+            deleteTask();
+        });
     }
 });
 
@@ -21,19 +52,17 @@ add.addEventListener('click', () => {
     if (todo.value.trim() == '') {
         window.alert('タスクを入力してください');
     } else {
-        const item = {
+        const element = {
             todoitem: todo.value,
             delConfirm: false,
         };
-        listItem.push(item);
+        listItem.push(element);
         storage.store = JSON.stringify(listItem);
-
-        controlItem(item);
     }
 });
 
-const controlItem = (item) => {
-    const taskContainer = document.createTextNode(todo.value);
+/*const controlItem = () => {
+    const taskContainer = document.createTextNode(item.todoitem);
     todo.value = '';
     const li = document.createElement('li');
     const p = document.createElement('p');
@@ -64,4 +93,4 @@ const controlItem = (item) => {
     delbtn.addEventListener('click', () => { 
         deleteTask();
     });
-};
+};*/
