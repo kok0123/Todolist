@@ -14,8 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     for (const item of listItem) { 
         //controlItem(item);
-        const taskContainer = document.createTextNode(item.todoitem);
-        todo.value = '';
+        const taskContainer = document.createTextNode(item.todoitem);       
         const li = document.createElement('li');
         const p = document.createElement('p');
 
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         delbtn.setAttribute('id', 'delbtn');
         li.appendChild(delbtn);
 
-        const deleteTask = () => {
+        /*const deleteTask = () => {
             const selectedTask = delbtn.closest('li');
             taskList.removeChild(selectedTask);
         
@@ -44,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         delbtn.addEventListener('click', () => { 
             deleteTask();
-        });
+        });*/
     }
 });
 
@@ -52,17 +51,30 @@ add.addEventListener('click', () => {
     if (todo.value.trim() == '') {
         window.alert('タスクを入力してください');
     } else {
-        const element = {
-            todoitem: todo.value,
-            delConfirm: false,
-        };
+        let element = {};
+        element.todoitem = todo.value;
+        element.delConfirm = false;
         listItem.push(element);
-        storage.store = JSON.stringify(listItem);
+        storage.store = JSON.stringify(listItem); //JSON変換
+
+        const taskContainer = document.createTextNode(todo.value);
+        todo.value = '';
+        const li = document.createElement('li');
+        const p = document.createElement('p');
+
+        p.appendChild(taskContainer);
+        li.appendChild(p);
+        taskList.appendChild(li);
+        
+        const delbtn = document.createElement('button');
+        delbtn.innerHTML = "消去";
+        delbtn.setAttribute('id', 'delbtn');
+        li.appendChild(delbtn);
     }
 });
 
 /*const controlItem = () => {
-    const taskContainer = document.createTextNode(item.todoitem);
+    const taskContainer = document.createTextNode(todo.value);
     todo.value = '';
     const li = document.createElement('li');
     const p = document.createElement('p');
