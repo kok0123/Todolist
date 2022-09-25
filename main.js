@@ -27,15 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
         delbtn.setAttribute('id', 'delbtn');
         li.appendChild(delbtn);
 
-        /*const deleteTask = () => {
+        const deleteTask = () => {
             const selectedTask = delbtn.closest('li');
             taskList.removeChild(selectedTask);
-        
-            const delContent = selectedTask.previousElementSibling;
-            const delFind = listItem.find(
-                (item) => item.todoitem == delContent.textContent
+ 
+            const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
+            const delItems = listItem.find(
+                (item) => item.todoitem == selectContent.textContent
             );
-            delFind.delConfirm = true;
+            delItems.delConfirm = true;
             const remainlistItem = listItem.filter((item) => item.delConfirm === false);
             listItem = remainlistItem;
             storage.store = JSON.stringify(listItem);
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         delbtn.addEventListener('click', () => { 
             deleteTask();
-        });*/
+        });
     }
 });
 
@@ -70,6 +70,24 @@ add.addEventListener('click', () => {
         delbtn.innerHTML = "消去";
         delbtn.setAttribute('id', 'delbtn');
         li.appendChild(delbtn);
+
+        const deleteTask = () => {
+            const selectedTask = delbtn.closest('li');
+            taskList.removeChild(selectedTask);
+
+            const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
+            const delItems = listItem.find(
+                (element) => element.todoitem == selectContent.textContent
+            );
+            delItems.delConfirm = true;
+            const remainlistItem = listItem.filter((element) => element.delConfirm === false);
+            listItem = remainlistItem;
+            storage.store = JSON.stringify(listItem);
+        };
+
+        delbtn.addEventListener('click', () => { 
+            deleteTask();
+        });
     }
 });
 
