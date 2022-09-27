@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     listItem = JSON.parse(json);
   
     for (const item of listItem) { 
-        //controlItem(item);
         const taskContainer = document.createTextNode(item.todoitem);       
         const li = document.createElement('li');
         const p = document.createElement('p');
@@ -48,79 +47,52 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 add.addEventListener('click', () => {
-    if (todo.value.trim() == '') {
-        window.alert('タスクを入力してください');
+    if (todo.value.trim() !== '') {    
+        const sameWords = listItem.find( //タスク内容が被った
+            (element) => element.todoitem == todo.value
+        );
+        if (sameWords === undefined) {
+            let element = {};
+            element.todoitem = todo.value;
+            element.delConfirm = false;
+            listItem.push(element);
+            storage.store = JSON.stringify(listItem); //JSON変換
+
+            const taskContainer = document.createTextNode(todo.value);
+            todo.value = '';
+            const li = document.createElement('li');
+            const p = document.createElement('p');
+
+            p.appendChild(taskContainer);
+            li.appendChild(p);
+            taskList.appendChild(li);
+            
+            const delbtn = document.createElement('button');
+            delbtn.innerHTML = "消去";
+            delbtn.setAttribute('id', 'delbtn');
+            li.appendChild(delbtn);
+
+            const deleteTask = () => {
+                const selectedTask = delbtn.closest('li');
+                taskList.removeChild(selectedTask);
+
+                const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
+                const delItems = listItem.find(
+                    (element) => element.todoitem == selectContent.textContent
+                );
+                delItems.delConfirm = true;
+                const remainlistItem = listItem.filter((element) => element.delConfirm === false);
+                listItem = remainlistItem;
+                storage.store = JSON.stringify(listItem);
+            };
+
+            delbtn.addEventListener('click', () => { 
+                deleteTask();
+            });
+        } else {
+            alert('同じタスクは入力できません')
+        }
     } else {
-        let element = {};
-        element.todoitem = todo.value;
-        element.delConfirm = false;
-        listItem.push(element);
-        storage.store = JSON.stringify(listItem); //JSON変換
-
-        const taskContainer = document.createTextNode(todo.value);
-        todo.value = '';
-        const li = document.createElement('li');
-        const p = document.createElement('p');
-
-        p.appendChild(taskContainer);
-        li.appendChild(p);
-        taskList.appendChild(li);
-        
-        const delbtn = document.createElement('button');
-        delbtn.innerHTML = "消去";
-        delbtn.setAttribute('id', 'delbtn');
-        li.appendChild(delbtn);
-
-        const deleteTask = () => {
-            const selectedTask = delbtn.closest('li');
-            taskList.removeChild(selectedTask);
-
-            const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
-            const delItems = listItem.find(
-                (element) => element.todoitem == selectContent.textContent
-            );
-            delItems.delConfirm = true;
-            const remainlistItem = listItem.filter((element) => element.delConfirm === false);
-            listItem = remainlistItem;
-            storage.store = JSON.stringify(listItem);
-        };
-
-        delbtn.addEventListener('click', () => { 
-            deleteTask();
-        });
+        window.alert('タスクを入力してください');
     }
 });
-
-/*const controlItem = () => {
-    const taskContainer = document.createTextNode(todo.value);
-    todo.value = '';
-    const li = document.createElement('li');
-    const p = document.createElement('p');
-
-    p.appendChild(taskContainer);
-    li.appendChild(p);
-    taskList.appendChild(li);
-    
-    const delbtn = document.createElement('button');
-    delbtn.innerHTML = "消去";
-    delbtn.setAttribute('id', 'delbtn');
-    li.appendChild(delbtn);
-
-    const deleteTask = () => {
-        const selectedTask = delbtn.closest('li');
-        taskList.removeChild(selectedTask);
-    
-        const delContent = selectedTask.previousElementSibling;
-        const delFind = listItem.find(
-            (item) => item.todoitem == delContent.textContent
-        );
-        delFind.delConfirm = true;
-        const remainlistItem = listItem.filter((item) => item.delConfirm === false);
-        listItem = remainlistItem;
-        storage.store = JSON.stringify(listItem);
-    };
-    
-    delbtn.addEventListener('click', () => { 
-        deleteTask();
-    });
-};*/
