@@ -3,7 +3,6 @@ const add = document.getElementById('add'); //追加ボタン
 const taskList = document.getElementById('taskList');
 
 var listItem = [];
-//const storage = localStorage;
 
 document.addEventListener("DOMContentLoaded", () => {
     const json = localStorage.store; 
@@ -61,8 +60,6 @@ add.addEventListener('click', () => {
                 todoitem: todo.value,
                 delConfirm: false
             };
-            //listItem.push(item);
-            //localStorage.store = JSON.stringify(listItem); //JSON変換
 
             const taskContainer = document.createTextNode(todo.value);
             todo.value = '';
@@ -80,21 +77,16 @@ add.addEventListener('click', () => {
 
             listItem.push(item);
 
-            //console.log(listItem);
-
             const deleteTask = () => {
                 const selectedTask = delbtn.closest('li');
                 taskList.removeChild(selectedTask);
 
                 const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
-                //console.log(selectContent);
-                //console.log(listItem);
                 for (let i = 0; i < listItem.length; i++) {
                     if (listItem[i].todoitem === selectContent.innerHTML) {
                         listItem[i].delConfirm = true;
                     }
                 }
-                //console.log(listItem);
 
                 var remainList = [];
                 listItem.forEach((el) => {
@@ -102,11 +94,6 @@ add.addEventListener('click', () => {
                         remainList.push(el);
                     }
                 });
-                //console.log(remainList);
-                /*listItem.filter((el) => {
-                    return el.delConfirm = false;
-                });
-                console.log(listItem);*/
                 listItem = remainList;
                 localStorage.store = JSON.stringify(listItem);
             };
@@ -114,7 +101,6 @@ add.addEventListener('click', () => {
             let cnt = 0;
             delbtn.addEventListener('click', () => {
                 cnt += 1;
-                //console.log(listItem); 
                 deleteTask();
             });
 
