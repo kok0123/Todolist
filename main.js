@@ -9,17 +9,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (json === undefined) { 
       return;
     }
-    listItem = JSON.parse(json);
-  
-    for (const item of listItem) { 
-        const taskContainer = document.createTextNode(item.todoitem),       
+    listItem = JSON.parse(json); //JavaScriptに戻す
+
+    for (let i = 0; i < listItem.length; i++) {
+        const taskContainer = document.createTextNode(listItem[i].todoitem),       
               li = document.createElement('li'),
               p = document.createElement('p');
-
+    
         p.appendChild(taskContainer);
         li.appendChild(p);
         taskList.appendChild(li);
-        
+    
         const delbtn = document.createElement('button');
         delbtn.innerHTML = "消去";
         delbtn.setAttribute('id', 'delbtn');
@@ -30,23 +30,33 @@ document.addEventListener("DOMContentLoaded", () => {
             taskList.removeChild(selectedTask);
 
             const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
-            const delItems = item.find((item) => {
-                return item.todoitem = selectContent.textContent;
-            });
-            if (item.todoitem === delItems.todoitem) {
-                item.delConfirm = true;
+            for (let i = 0; i < listItem.length; i++) {
+                if (listItem[i].todoitem === selectContent.innerHTML) {
+                    listItem[i].delConfirm = true;
+                }
             }
-            const remainlistItem = item.filter((item) => {
-                return item.delConfirm = false;
+
+            var remainList = [];
+            listItem.forEach((el) => {
+                if (el.delConfirm === false) {
+                    remainList.push(el);
+                }
             });
-            listItem = remainlistItem;
-            console.log(listItem);
+            listItem = remainList;
             localStorage.store = JSON.stringify(listItem);
         };
 
-        delbtn.addEventListener('click', () => { 
+        let cnt = 0;
+        delbtn.addEventListener('click', () => {
+            cnt += 1;
             deleteTask();
         });
+
+        if (cnt === 0) {
+            localStorage.store = JSON.stringify(listItem); //JSON変換    
+        }
+
+        cnt = 0;
     }
 });
 
