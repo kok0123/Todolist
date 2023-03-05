@@ -1,15 +1,15 @@
-const todo = document.getElementById('inputTodo');   //タスク
-const add = document.getElementById('add'); //追加ボタン
-const taskList = document.getElementById('taskList');
+const todo = document.getElementById('inputTodo'),   //タスク
+      add = document.getElementById('add'), //追加ボタン
+      taskList = document.getElementById('taskList');
 
 var listItem = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-    const json = localStorage.store; 
-    if (json === undefined) { 
+    const localStorageVal = localStorage.store; 
+    if (localStorageVal === undefined) { 
       return;
     }
-    listItem = JSON.parse(json); //JavaScriptに戻す
+    listItem = JSON.parse(localStorageVal) //JavaScriptに戻す
 
     for (let i = 0; i < listItem.length; i++) {
         const taskContainer = document.createTextNode(listItem[i].todoitem),       
@@ -46,17 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.store = JSON.stringify(listItem);
         };
 
-        let cnt = 0;
         delbtn.addEventListener('click', () => {
-            cnt += 1;
             deleteTask();
         });
-
-        if (cnt === 0) {
-            localStorage.store = JSON.stringify(listItem); //JSON変換    
-        }
-
-        cnt = 0;
     }
 });
 
