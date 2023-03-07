@@ -53,11 +53,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 add.addEventListener('click', () => {
-    if (todo.value.trim() !== '') {    
-        const sameWords = listItem.find((item) => { //タスク内容が被った場合
-            item.todoitem == todo.value
-        });
-        if (sameWords === undefined) {
+    if (todo.value.trim() !== '') { 
+        let possibleTask = "Yes";
+        if (listItem !== []) {
+            for (let i = 0; i < listItem.length; i++) {
+                if (listItem[i].todoitem === todo.value) {
+                    possibleTask = "No";    
+                }               
+            }
+        }
+        
+        if (possibleTask === "Yes") {
             var item = {
                 todoitem: todo.value,
                 delConfirm: false
@@ -112,8 +118,12 @@ add.addEventListener('click', () => {
 
             cnt = 0;
         } else {
-            alert('同じタスクは入力できません')
+            alert('同じタスクは入力できません');
+            todo.value = "";
         }
+
+        possibleTask = "Yes";
+
     } else {
         window.alert('タスクを入力してください');
     }
