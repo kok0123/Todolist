@@ -1,15 +1,15 @@
-const todo = document.getElementById('inputTodo'),   //タスク
-      add = document.getElementById('add'), //追加ボタン
+const todo = document.getElementById('inputTodo'), 
+      add = document.getElementById('add'), 
       taskList = document.getElementById('taskList');
 
 var listItem = [];
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
     const localStorageVal = localStorage.store; 
     if (localStorageVal === undefined) { 
       return;
     }
-    listItem = JSON.parse(localStorageVal) //JavaScriptに戻す
+    listItem = JSON.parse(localStorageVal);
 
     for (let i = 0; i < listItem.length; i++) {
         const taskContainer = document.createTextNode(listItem[i].todoitem),       
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const selectedTask = delbtn.closest('li');
             taskList.removeChild(selectedTask);
 
-            const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
+            const selectContent = selectedTask.children[0]; 
             for (let i = 0; i < listItem.length; i++) {
                 if (listItem[i].todoitem === selectContent.innerHTML) {
                     listItem[i].delConfirm = true;
@@ -53,11 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 add.addEventListener('click', () => {
-    if (todo.value.trim() !== '') { 
-        let possibleTask = "Yes";
+    if (todo.value.trim() !== '' && todo.value.trim().length <= 20) {
+
+        let possibleTask = "Yes"; //タスク重複の有無
         if (listItem !== []) {
             for (let i = 0; i < listItem.length; i++) {
-                if (listItem[i].todoitem === todo.value) {
+                if (listItem[i].todoitem === todo.value.trim()) {
                     possibleTask = "No";    
                 }               
             }
@@ -89,7 +90,7 @@ add.addEventListener('click', () => {
                 const selectedTask = delbtn.closest('li');
                 taskList.removeChild(selectedTask);
 
-                const selectContent = selectedTask.children[0]; //liタグの子要素であるpタグ
+                const selectContent = selectedTask.children[0];
                 for (let i = 0; i < listItem.length; i++) {
                     if (listItem[i].todoitem === selectContent.innerHTML) {
                         listItem[i].delConfirm = true;
@@ -112,19 +113,23 @@ add.addEventListener('click', () => {
                 deleteTask();
             });
 
-            if (cnt === 0) {
-                localStorage.store = JSON.stringify(listItem); //JSON変換    
+            if (cnt === 0) { //削除ボタンが押されなかった場合
+                localStorage.store = JSON.stringify(listItem);   
             }
 
             cnt = 0;
         } else {
-            alert('同じタスクは入力できません');
-            todo.value = "";
+            window.alert("同じタスクは入力できません。");
         }
 
         possibleTask = "Yes";
 
+    } else if (todo.value.trim().length > 20) {
+        var todoVal = todo.value.trim().length,
+            cntVal = todoVal - 20;
+
+        window.alert("20文字以内で入力してください。" + "\n" + `${cntVal}文字多く入力しています。`);
     } else {
-        window.alert('タスクを入力してください');
+        window.alert("タスクを入力してください。");
     }
 });
